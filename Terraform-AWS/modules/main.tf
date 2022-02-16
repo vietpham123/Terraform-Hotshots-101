@@ -13,6 +13,7 @@ provider "aws" {
 module "network" {
     source = "./Network"
     vpc_name = var.name
+    compute_name = var.system_name
 }
 
 module "compute" {
