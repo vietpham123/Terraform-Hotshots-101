@@ -18,6 +18,6 @@ variable "name" {
     type = string
 }
 
-variable "system_name {
+variable "system_name" {
     type = string
 }
