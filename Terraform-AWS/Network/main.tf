@@ -47,16 +47,16 @@ resource "aws_internet_gateway" "NewIGW" {
 # the new VPC                                            #
 ##########################################################
 
-data "aws_route_table" "VPC_MAIN_RT" {
-  filter {
-    name   = "association.main"
-    values = ["true"]
-  }
-  filter {
-    name   = "${var.vpc_name}_RT"
-    values = [aws_vpc.TFVPC.id]
-  }
-}
+#data "aws_route_table" "VPC_MAIN_RT" {
+#  filter {
+#    name   = "association.main"
+#    values = ["true"]
+#  }
+#  filter {
+#    name   = "${var.vpc_name}_RT"
+#    values = [aws_vpc.TFVPC.id]
+#  }
+#}
 
 ##########################################################
 # Create a route in the new VPC's main RT, to point      #
