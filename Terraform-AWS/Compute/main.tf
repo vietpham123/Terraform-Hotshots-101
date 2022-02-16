@@ -31,7 +31,7 @@ data "aws_availability_zones" "AZs" {
 resource "aws_instance" "raddit" {
     ami = "ami-05803413c51f242b7"
     instance_type = "t2.micro"
-    key_name = var.key_pair
+#    key_name = var.key_pair
     subnet_id = var.raddit_subnet
     associate_public_ip_address = "true"
     vpc_security_group_ids = [var.security_group]
