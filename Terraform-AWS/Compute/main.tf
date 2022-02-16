@@ -39,6 +39,24 @@ resource "aws_instance" "raddit" {
     tags = {
         Name = "raddit"
     }
+
+    user_data = <<-EOL
+    #!/bin/bash -xe
+
+    git clone https://github.com/Artemmkin/raddit.git /var/lib/raddit
+    apt-get update && sudo apt-get install -y ruby-full build-essential
+    gem install bundler -v "$(grep -A 1 "BUNDLED WITH" ~/var/lib/raddit/Gemfile.lock | tail -n 1)"
+    cd /var/lib/raddit && sudo bundle install && cd
+    wget -qO - https://www.mongodb.org/static/pgp/server-3.2.asc | sudo apt-key add -
+    echo "deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.2.list
+    sudo apt-get update && sudo apt-get install -y mongodb-org
+    sudo systemctl start mongod
+    sudo systemctl enable mongod
+    sudo wget https://raw.githubusercontent.com/vietpham123/Automation-HotShots/main/raddit.service -P /etc/systemd/system/
+    sudo systemctl start raddit
+    sudo systemctl enable raddit
+    EOL
+    
     lifecycle {
         ignore_changes = [ami]
     }
@@ -47,8 +65,3 @@ resource "aws_instance" "raddit" {
 ###########################################################
 # configuring system                                      #
 ###########################################################
-
-#resource "aws_ebs_volume" "raddit_ebs" {
-#    availability_zone = element(data.aws_availability_zones.AZs.names, 0)
-#    size = 20
-#}
