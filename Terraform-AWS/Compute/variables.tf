@@ -25,3 +25,7 @@ variable "security_group" {
 variable "key_pair" {
     type = string
 }
+
+variable "compute_name" {
+    type = string
+}

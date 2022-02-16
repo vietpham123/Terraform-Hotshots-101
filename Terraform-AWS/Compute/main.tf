@@ -37,7 +37,7 @@ resource "aws_instance" "raddit" {
     vpc_security_group_ids = [var.security_group]
     availability_zone = element(data.aws_availability_zones.AZs.names, 0)
     tags = {
-        Name = "raddit"
+        Name = var.compute_name
     }
 
     user_data = <<-EOL
