@@ -35,6 +35,15 @@ variable "vpc_name" {
     type = string
 }
 
+#########################################################
+# Enumerate all available AZ's in the VPC for a         #
+# given region                                          #
+#########################################################
+
+data "aws_availability_zones" "AZs" {
+  state = "available"
+}
+
 ###########################################################
 # This terraform manifest is used to create the           #
 # networking infrastructure needed for an application     #
@@ -108,15 +117,6 @@ resource "aws_default_route_table" "Default_Route" {
   tags = {
     Name = "${var.vpc_name}_RE"
  }
-}
-
-#########################################################
-# Enumerate all available AZ's in the VPC for a         #
-# given region                                          #
-#########################################################
-
-data "aws_availability_zones" "AZs" {
-  state = "available"
 }
 
 #########################################################
@@ -200,25 +200,6 @@ resource "aws_security_group" "Permit_HTTPS_Any" {
 # that allows users to add links and upvote them          #
 # using Ubuntu 16.04, ruby, mongodb                       #
 ###########################################################
-
-###########################################################
-# AWS provider configuration                              #
-###########################################################
-
-provider "aws" {
-    region = var.region
-    access_key = var.access_key
-    secret_key = var.secret_key
-}
-
-#########################################################
-# Enumerate all available AZ's in the VPC for a         #
-# given region                                          #
-#########################################################
-
-data "aws_availability_zones" "AZs" {
-  state = "available"
-}
 
 ###########################################################
 # AWS Instance t2.micro Ubuntu 16.04                      #
