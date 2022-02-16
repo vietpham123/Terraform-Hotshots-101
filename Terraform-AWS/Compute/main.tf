@@ -32,9 +32,9 @@ resource "aws_instance" "raddit" {
     ami = "ami-05803413c51f242b7"
     instance_type = "t2.micro"
     key_name = "raddit-user"
-    subnet_id = "subnet-012372c158870202b"
+    subnet_id = "var.subnet"
     associate_public_ip_address = "true"
-    vpc_security_group_ids = ["sg-0f7209c07613856fa"]
+    vpc_security_group_ids = ["var.security_group"]
     availability_zone = element(data.aws_availability_zones.AZs.names, 0)
     tags = {
         Name = "raddit"
