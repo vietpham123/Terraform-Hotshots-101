@@ -1,0 +1,12 @@
+[Unit]
+Description=Raddit application
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/var/lib/raddit
+ExecStart=/bin/bash -lc 'puma'
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
