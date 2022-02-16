@@ -128,12 +128,20 @@ resource "aws_security_group" "Permit_HTTPS_Any" {
   vpc_id      = aws_vpc.TFVPC.id
 
   ingress {
-    description      = "Allow inbout TCP 443 from any IPv4"
-    from_port        = 443
-    to_port          = 443
+    description      = "Allow inbound TCP 9292 from any IPv4"
+    from_port        = 9292
+    to_port          = 9292
     protocol         = "tcp"
     cidr_blocks      = ["0.0.0.0/0"]
     # ipv6_cidr_blocks = [aws_vpc.TFVPC.ipv6_cidr_block]
+  }
+
+  ingress {
+    description     = "Allow inbound TCP 22 from any IPv4"
+    from_port       = 22
+    to_port         = 22
+    protocol        = "tcp"
+    cidr_blocks     = ["0.0.0.0/0]
   }
 
   egress {
