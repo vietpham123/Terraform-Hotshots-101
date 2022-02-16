@@ -17,3 +17,7 @@ variable "region" {
 variable "name" {
     type = string
 }
+
+variable "compute_name" {
+    type = string
+}
