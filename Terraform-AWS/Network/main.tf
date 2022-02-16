@@ -38,7 +38,7 @@ resource "aws_vpc" "TFVPC" {
 resource "aws_internet_gateway" "NewIGW" {
   vpc_id = aws_vpc.TFVPC.id
   tags = {
-    Name = var.vpc_name + "IGW"
+    Name = "${var.vpc_name} IGW"
   }
 }
 
@@ -53,7 +53,7 @@ data "aws_route_table" "VPC_MAIN_RT" {
     values = ["true"]
   }
   filter {
-    name   = "vpc-id"
+    name   = "${var.vpc_name} RT"
     values = [aws_vpc.TFVPC.id]
   }
 }
@@ -70,7 +70,7 @@ resource "aws_default_route_table" "Default_Route" {
     gateway_id = aws_internet_gateway.NewIGW.id
   }
   tags = {
-    Name = var.vpc_name + "Route Entry"
+    Name = "${var.vpc_name} Route Entry"
   }
 }
 
@@ -99,7 +99,7 @@ resource "aws_subnet" "WebFarm" {
   cidr_block        = "10.0.1.0/24"
   map_public_ip_on_launch = true 
     tags = {
-    Name = "Morpheus Web Subnet"
+    Name = "${var.vpc_name} Web Subnet"
   }
 }
 
@@ -114,7 +114,7 @@ resource "aws_subnet" "DataFarm" {
   vpc_id            = aws_vpc.TFVPC.id
   cidr_block        = "10.0.2.0/24"
     tags = {
-    Name = "Morpheus Data Subnet"
+    Name = "${var.vpc_name} Data Subnet"
   }
 }
 
@@ -124,7 +124,7 @@ resource "aws_subnet" "DataFarm" {
 #########################################################
 
 resource "aws_security_group" "Permit_HTTPS_Any" {
-  name        = "Morpheus Lab Day Web ACL "
+  name        = "${var.vpc_name} Web ACL"
   description = "Allow inbound web traffic"
   vpc_id      = aws_vpc.TFVPC.id
 
@@ -146,6 +146,6 @@ resource "aws_security_group" "Permit_HTTPS_Any" {
   }
 
   tags = {
-    Name = var.vpc_name + "Security Group"
+    Name = "${var.vpc_name} Security Group"
   }
 }
