@@ -31,10 +31,9 @@ data "aws_availability_zones" "AZs" {
 resource "aws_instance" "raddit" {
     ami = "ami-05803413c51f242b7"
     instance_type = "t2.micro"
-    subnet_id = "subnet-09d414745b9cf51b8"
+    subnet_id = "subnet-012372c158870202b"
     associate_public_ip_address = "true"
-    vpc_security_group_ids = ["sg-060411117b2284795"]
-    key_name = "raddit-user"
+    vpc_security_group_ids = ["sg-0f7209c07613856fa"]
     availability_zone = element(data.aws_availability_zones.AZs.names, 0)
     tags = {
         Name = "raddit"
