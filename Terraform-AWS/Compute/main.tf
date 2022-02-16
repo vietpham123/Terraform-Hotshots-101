@@ -31,7 +31,7 @@ data "aws_availability_zones" "AZs" {
 resource "aws_instance" "raddit" {
     ami = "ami-05803413c51f242b7"
     instance_type = "t2.micro"
-    key_name = "raddit-user"
+    key_name = var.key_pair
     subnet_id = var.raddit_subnet
     associate_public_ip_address = "true"
     vpc_security_group_ids = [var.security_group]
@@ -45,20 +45,10 @@ resource "aws_instance" "raddit" {
 }
 
 ###########################################################
-# AWS EBS Volume                                          #
+# configuring system                                      #
 ###########################################################
 
 #resource "aws_ebs_volume" "raddit_ebs" {
 #    availability_zone = element(data.aws_availability_zones.AZs.names, 0)
 #    size = 20
-#}
-
-###########################################################
-# Attach EBS volume                                       #
-###########################################################
-
-#resource "aws_volume_attachment" "raddit_ebsatt" {
-#    device_name = "dev/sdh"
-#    volume_id = aws_ebs_volume.raddit_ebs.id
-#    instance_id = aws_instance.raddit.id
 #}

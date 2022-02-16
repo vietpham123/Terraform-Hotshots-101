@@ -21,3 +21,7 @@ variable "raddit_subnet" {
 variable "security_group" {
     type = string
 }
+
+variable "key_pair" {
+    type = string
+}
