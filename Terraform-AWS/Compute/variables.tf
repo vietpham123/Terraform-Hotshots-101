@@ -14,7 +14,7 @@ variable "region" {
     type = string
 }
 
-variable "subnet" {
+variable "raddit_subnet" {
     type = string
 }
 
