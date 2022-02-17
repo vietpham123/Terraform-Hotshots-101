@@ -1,9 +1,9 @@
 # Outputs to use with VM building
-output "Virtual_Network" {
+output "Virtual_Network_Name" {
     value = azurerm_virtual_network.hashinet.name
 }
 
-output "Subnet_Name" {
+output "Subnet_ID" {
     value = azurerm_subnet.hashisubnet.id
 }
 

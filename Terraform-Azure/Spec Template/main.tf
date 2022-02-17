@@ -30,11 +30,6 @@ provider "azurerm" {
 # Variables                                                      #
 ##################################################################
 
-variable "morpheusrg" {
-  type = string
-  default = ""
-}
-
 variable "morpheusregion" {
   type = string
   default = ""
@@ -54,24 +49,13 @@ variable "user_password" {
   default = ""
 }
 
-variable "morpheusrg" {
-  type = string
-  default = ""
-}
+##################################################################
+# Resource Group Creation                                        #
+##################################################################
 
-variable "morpheusregion" {
-  type = string
-  default = ""
-}
-
-variable "morpheussubnet" {
-  type = string
-  default = ""
-}
-
-variable "morpheusnsg" {
-  type = string
-  default = ""
+resource "azure_resource_group" "morpheusrg" {
+    name        = var.name
+    location    = var.morpheusregion
 }
 
 ##################################################################
@@ -82,10 +66,10 @@ resource "azurerm_virtual_network" "morpheusnet" {
   name                = "${var.name}vnet"
   address_space       = ["10.0.0.0/16"]
   location            = var.morpheusregion
-  resource_group_name = var.morpheusrg
+  resource_group_name = azure_resource_group.morpheusrg.name
 
   tags = {
-    environment = "Terraform Demo"
+    environment = "Morpheus HotShots"
   }
 }
 
@@ -95,8 +79,8 @@ resource "azurerm_virtual_network" "morpheusnet" {
 
 resource "azurerm_subnet" "morpheussubnet" {
   name                 = "${var.name}subnet"
-  resource_group_name  = var.morpheusrg
-  virtual_network_name = azurerm_virtual_network.hashinet.name
+  resource_group_name  = azure_resource_group.morpheusrg.name
+  virtual_network_name = azurerm_virtual_network.morpheusnet.name
   address_prefixes     = ["10.0.1.0/24"]
 }
 
@@ -107,7 +91,7 @@ resource "azurerm_subnet" "morpheussubnet" {
 resource "azurerm_network_security_group" "morpheusnsg" {
   name                = "${var.name}nsg"
   location            = var.morpheusregion
-  resource_group_name = var.hashirg
+  resource_group_name = azure_resource_group.morpheusrg.name
 
   security_rule {
     name                       = "SSH"
@@ -141,7 +125,7 @@ resource "azurerm_network_security_group" "morpheusnsg" {
 resource "azurerm_public_ip" "morpheuspubip" {
   name                = "${var.name}PublicIP"
   location            = var.morpheusregion
-  resource_group_name = var.morpheusrg
+  resource_group_name = azure_resource_group.morpheusrg.name
   allocation_method   = "Dynamic"
 }
 
@@ -152,10 +136,10 @@ resource "azurerm_public_ip" "morpheuspubip" {
 resource "azurerm_network_interface" "morpheusnic" {
   name                = "${var.name}NIC"
   location            = var.morpheusregion
-  resource_group_name = var.morpheusrg
+  resource_group_name = azure_resource_group.morpheusrg.name
   ip_configuration {
     name                          = "${var.name}NicConfiguration"
-    subnet_id                     = var.morpheussubnet
+    subnet_id                     = azurerm_subnet.morpheussubnet.id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.morpheuspubip.id
   }
@@ -167,7 +151,7 @@ resource "azurerm_network_interface" "morpheusnic" {
 
 resource "azurerm_network_interface_security_group_association" "morpheusnicsgass" {
   network_interface_id      = azurerm_network_interface.morpheusnic.id
-  network_security_group_id = var.vpc_nsg
+  network_security_group_id = azurerm_network_security_group.morpheusnsg.id
 }
 
 ###################################################################
@@ -177,7 +161,7 @@ resource "azurerm_network_interface_security_group_association" "morpheusnicsgas
 resource "azurerm_virtual_machine" "radditvm" {
   name                  = "${var.name}-vm"
   location              = var.morpheusregion
-  resource_group_name   = var.morpheusrg
+  resource_group_name   = azure_resource_group.morpheusrg.name
   network_interface_ids = [azurerm_network_interface.morpheusnic.id]
   vm_size               = "Standard_DS1_v2"
 
@@ -237,5 +221,5 @@ EOF
 ###############################################################################
 
 output "public_ip" {
-    value = aws_instance.raddit.public_ip
+ value = azurerm_public_ip.morpheuspubip.ip_address
 }

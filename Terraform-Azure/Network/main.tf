@@ -17,7 +17,7 @@ provider "azurerm" {
 }
 
 # Create a resource group
-resource "azure_resource_group" "morpheusrg" {
+resource "azurerm_resource_group" "morpheusrg" {
     name        = var.name
     location    = var.morpheusregion
 }
