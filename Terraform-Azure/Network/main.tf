@@ -10,10 +10,10 @@ terraform {
 provider "azurerm" {
   features {}
     
-    subscription_id = 
-    client_id = 
-    client_secret = 
-    tenant_id = 
+    subscription_id = var.subid
+    client_id = var.clientid
+    client_secret = var.clientsecret
+    tenant_id = var.tenantid
 }
 
 # Create a resource group
@@ -28,7 +28,7 @@ resource "azurerm_virtual_network" "morpheusnet" {
   name                = "${var.name}vnet"
   address_space       = ["10.0.0.0/16"]
   location            = var.morpheusregion
-  resource_group_name = var.morpheusrg
+  resource_group_name = azurerm_resource_group.morpheusrg.name
 
   tags = {
     environment = "Terraform Demo"
@@ -38,8 +38,8 @@ resource "azurerm_virtual_network" "morpheusnet" {
 # Create subnet
 resource "azurerm_subnet" "morpheussubnet" {
   name                 = "${var.name}subnet"
-  resource_group_name  = var.morpheusrg
-  virtual_network_name = azurerm_virtual_network.hashinet.name
+  resource_group_name  = azurerm_resource_group.morpheusrg.name
+  virtual_network_name = azurerm_virtual_network.morpheusnet.name
   address_prefixes     = ["10.0.1.0/24"]
 }
 
@@ -47,7 +47,7 @@ resource "azurerm_subnet" "morpheussubnet" {
 resource "azurerm_network_security_group" "morpheusnsg" {
   name                = "${var.name}nsg"
   location            = var.morpheusregion
-  resource_group_name = var.hashirg
+  resource_group_name = azurerm_resource_group.morpheusrg.name
 
   security_rule {
     name                       = "SSH"

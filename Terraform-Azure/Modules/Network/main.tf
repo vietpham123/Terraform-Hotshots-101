@@ -1,11 +1,16 @@
-# Create a resource group
-resource "azure_resource_group" "morpheusrg" {
+#############################################################
+# Resource Group Creation                                   #
+#############################################################
+
+resource "azurerm_resource_group" "morpheusrg" {
     name        = var.name
     location    = var.morpheusregion
 }
 
+#############################################################
+# Virtual Network Creation                                  #
+#############################################################
 
-# Create virtual network
 resource "azurerm_virtual_network" "morpheusnet" {
   name                = "${var.name}vnet"
   address_space       = ["10.0.0.0/16"]
@@ -17,19 +22,25 @@ resource "azurerm_virtual_network" "morpheusnet" {
   }
 }
 
-# Create subnet
+#############################################################
+# Subnet Creation                                           #
+#############################################################
+
 resource "azurerm_subnet" "morpheussubnet" {
   name                 = "${var.name}subnet"
-  resource_group_name  = var.morpheusrg
+  resource_group_name  = azurerm_resource_group.morpheusrg.name
   virtual_network_name = azurerm_virtual_network.hashinet.name
   address_prefixes     = ["10.0.1.0/24"]
 }
 
-# Create Network Security Group and Rule
+#############################################################
+# Security Group and Rule Creation                          #
+#############################################################
+
 resource "azurerm_network_security_group" "morpheusnsg" {
   name                = "${var.name}nsg"
   location            = var.morpheusregion
-  resource_group_name = var.hashirg
+  resource_group_name = azurerm_resource_group.morpheusrg.name
 
   security_rule {
     name                       = "SSH"

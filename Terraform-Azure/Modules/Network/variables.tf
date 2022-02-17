@@ -1,8 +1,3 @@
-variable "morpheusrg" {
-  type = string
-  default = ""
-}
-
 variable "morpheusregion" {
   type = string
   default = ""

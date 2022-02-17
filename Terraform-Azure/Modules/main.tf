@@ -12,20 +12,26 @@ terraform {
 
 provider "azurerm" {
   features {}
-    subscription_id = 
-    client_id = 
-    client_secret = 
-    tenant_id = 
+    subscription_id = var.subid
+    client_id = var.clientid
+    client_secret = var.clientsecret
+    tenant_id = var.tenantid
 }
 
 module "network" {
     source = "./Network"
-    vpc_name = var.name
+    name = var.name
+    morpheusregion = var.azure_region
 }
 
 module "compute" {
     source = "./Compute"
-    raddit_subnet = module.network.WebFarm_Subnet_ID
-    security_group = module.network.Security_Group_ID
-    compute_name = var.name
+    user_name = var.azuser_name
+    user_password = var.azpassword
+    morpheusrg = module.network.Resource_Group
+    morpheusregion = var.azure_region
+    morpheussubnet = module.network.Subnet_ID
+    morpheusnsg = module.network.Network_Security_Group
+    name = var.name
+    morpheusregion = var.azure_region
 }

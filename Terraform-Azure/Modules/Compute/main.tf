@@ -1,4 +1,7 @@
-# Create Public IPs
+##################################################################
+# Public IP Creation                                             #
+##################################################################
+
 resource "azurerm_public_ip" "morpheuspubip" {
   name                = "${var.name}PublicIP"
   location            = var.morpheusregion
@@ -6,7 +9,10 @@ resource "azurerm_public_ip" "morpheuspubip" {
   allocation_method   = "Dynamic"
 }
 
-# Create Network Interface
+#################################################################
+# Network Interface Creation                                    #
+#################################################################
+
 resource "azurerm_network_interface" "morpheusnic" {
   name                = "${var.name}NIC"
   location            = var.morpheusregion
@@ -19,12 +25,19 @@ resource "azurerm_network_interface" "morpheusnic" {
   }
 }
 
+#################################################################
+# Network Interface Security Group Association Creation         #
+#################################################################
+
 resource "azurerm_network_interface_security_group_association" "morpheusnicsgass" {
   network_interface_id      = azurerm_network_interface.morpheusnic.id
   network_security_group_id = var.vpc_nsg
 }
 
-# Create virtual machine
+#################################################################
+# Virtual Machine Creation                                      #
+#################################################################
+
 resource "azurerm_virtual_machine" "radditvm" {
   name                  = "${var.name}-vm"
   location              = var.morpheusregion

@@ -9,10 +9,10 @@ terraform {
 
 provider "azurerm" {
   features {}
-    subscription_id = 
-    client_id = 
-    client_secret = 
-    tenant_id = 
+    subscription_id = var.subid
+    client_id = var.clientid
+    client_secret = var.clientsecret
+    tenant_id = var.tenantid
 }
 
 # Create Public IPs
