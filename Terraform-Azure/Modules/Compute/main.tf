@@ -1,20 +1,3 @@
-terraform {
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "~>2.0"
-    }
-  }
-}
-
-provider "azurerm" {
-  features {}
-    subscription_id = 
-    client_id = 
-    client_secret = 
-    tenant_id = 
-}
-
 # Create Public IPs
 resource "azurerm_public_ip" "morpheuspubip" {
   name                = "${var.name}PublicIP"

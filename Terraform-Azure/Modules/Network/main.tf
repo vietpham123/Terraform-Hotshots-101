@@ -1,21 +1,3 @@
-terraform {
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "~>2.0"
-    }
-  }
-}
-
-provider "azurerm" {
-  features {}
-    
-    subscription_id = 
-    client_id = 
-    client_secret = 
-    tenant_id = 
-}
-
 # Create a resource group
 resource "azure_resource_group" "morpheusrg" {
     name        = var.name
