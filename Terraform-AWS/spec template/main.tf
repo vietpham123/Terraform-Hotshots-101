@@ -1,40 +1,3 @@
-################################################
-# Terraform variables                          #
-################################################
-
-################################################
-#  Access key, secret variable from tfvars     #
-#  in cloud profiles                           #
-################################################
-
-variable "access_key" {
-    type = string
-}
-
-variable "secret_key" {
-    type = string
-}
-
-################################################
-# Region to use for services, customer defined #
-################################################
-
-variable "region" {
-    type = string
-}
-
-################################################
-# Terraform variables                          #
-################################################
-
-variable "compute_name" {
-    type = string
-}
-
-variable "vpc_name" {
-    type = string
-}
-
 #########################################################
 # Enumerate all available AZ's in the VPC for a         #
 # given region                                          #
@@ -71,7 +34,7 @@ resource "aws_vpc" "TFVPC" {
   enable_dns_support   = true
   enable_dns_hostnames = true
   tags = {
-    Name = var.vpc_name
+    Name = var.name
   }
 }
 
@@ -83,7 +46,7 @@ resource "aws_vpc" "TFVPC" {
 resource "aws_internet_gateway" "NewIGW" {
   vpc_id = aws_vpc.TFVPC.id
   tags = {
-    Name = "${var.vpc_name}_IGW"
+    Name = "${var.name}_IGW"
   }
 }
 
@@ -115,7 +78,7 @@ resource "aws_default_route_table" "Default_Route" {
     gateway_id = aws_internet_gateway.NewIGW.id
   }
   tags = {
-    Name = "${var.vpc_name}_RE"
+    Name = "${var.name}_RE"
  }
 }
 
@@ -135,7 +98,7 @@ resource "aws_subnet" "WebFarm" {
   cidr_block        = "10.0.1.0/24"
   map_public_ip_on_launch = true 
     tags = {
-    Name = "${var.vpc_name}_Web_Subnet"
+    Name = "${var.name}_Web_Subnet"
   }
 }
 
@@ -150,7 +113,7 @@ resource "aws_subnet" "DataFarm" {
   vpc_id            = aws_vpc.TFVPC.id
   cidr_block        = "10.0.2.0/24"
     tags = {
-    Name = "${var.vpc_name}_Data_Subnet"
+    Name = "${var.name}_Data_Subnet"
   }
 }
 
@@ -160,7 +123,7 @@ resource "aws_subnet" "DataFarm" {
 #########################################################
 
 resource "aws_security_group" "Permit_HTTPS_Any" {
-  name        = "${var.vpc_name}_Web_ACL"
+  name        = "${var.name}_Web_ACL"
   description = "Allow inbound web traffic"
   vpc_id      = aws_vpc.TFVPC.id
 
@@ -190,7 +153,7 @@ resource "aws_security_group" "Permit_HTTPS_Any" {
   }
 
   tags = {
-    Name = "${var.vpc_name}_SG"
+    Name = "${var.name}_SG"
   }
 }
 
@@ -213,7 +176,7 @@ resource "aws_instance" "raddit" {
     vpc_security_group_ids = [aws_security_group.Permit_HTTPS_Any.id]
     availability_zone = element(data.aws_availability_zones.AZs.names, 0)
     tags = {
-        Name = var.compute_name
+        Name = "${var.name}_EC2"
     }
 
     user_data = <<EOF
