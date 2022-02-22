@@ -19,5 +19,5 @@ module "compute" {
     source = "./Compute"
     raddit_subnet = module.network.WebFarm_Subnet_ID
     security_group = module.network.Security_Group_ID
-    compute_name = var.system_name
+    compute_name = var.name
 }
