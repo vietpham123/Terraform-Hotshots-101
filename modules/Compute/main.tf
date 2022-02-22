@@ -33,7 +33,7 @@ resource "aws_instance" "raddit" {
 
     user_data = <<EOF
 #! /bin/bash
-sudo git clone https://github.com/Artemmkin/raddit.git /var/lib/raddit
+sudo git clone https://github.com/vietpham123/raddit.git /var/lib/raddit
 sudo apt-get update
 sudo apt-get install -y ruby-full build-essential
 sudo gem install bundler -v "$(grep -A 1 "BUNDLED WITH" ~/var/lib/raddit/Gemfile.lock | tail -n 1)"
@@ -46,7 +46,7 @@ sudo apt-get update
 sudo apt-get install -y mongodb-org
 sudo systemctl start mongod
 sudo systemctl enable mongod
-sudo wget https://raw.githubusercontent.com/vietpham123/Automation-HotShots/main/raddit.service -P /etc/systemd/system/
+sudo wget https://raw.githubusercontent.com/vietpham123/Terraform-Hotshots-101/main/raddit.service -P /etc/systemd/system/
 sudo systemctl start raddit
 sudo systemctl enable raddit
 EOF
