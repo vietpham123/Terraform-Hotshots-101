@@ -27,10 +27,6 @@ variable "region" {
 # Terraform variables                          #
 ################################################
 
-variable "compute_name" {
-    type = string
-}
-
-variable "vpc_name" {
+variable "name" {
     type = string
 }
