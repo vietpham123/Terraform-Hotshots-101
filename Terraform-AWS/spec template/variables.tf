@@ -30,4 +30,5 @@ variable "region" {
 
 variable "name" {
     type = string
+    default = "<%=customOptions.radname%>"
 }
