@@ -21,8 +21,8 @@ variable "secret_key" {
 
 variable "region" {
     type = string
-    default = "us-east-2"
-#    default = "<%=customOptions.awsRegion%>"
+#    default = "us-east-2"
+     default = "<%=customOptions.awsRegion%>"
 }
 
 ################################################
@@ -31,5 +31,5 @@ variable "region" {
 
 variable "name" {
     type = string
-#   default = "<%=customOptions.radName%>"
+    default = "<%=customOptions.radName%>"
 }
